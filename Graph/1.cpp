@@ -64,7 +64,7 @@ class Edge {
 };
 
 // 图
-class CMap {
+class Mymap {
 private:
     int capacity;          // 顶点总数
     int node_count;        // 当前顶点数量
@@ -72,7 +72,7 @@ private:
     int *adjacency_matrix; // 邻接距阵
     Edge *edge_array;      // 最小生成树边集合
 public:
-    CMap(int iCapacity) {
+    Mymap(int iCapacity) {
         capacity = iCapacity;
         node_count = 0;
         node_array = new Node[capacity];
@@ -80,7 +80,7 @@ public:
         memset(adjacency_matrix, 0, capacity * capacity * sizeof(int));
         edge_array = new Edge[capacity - 1];
     }
-    ~CMap(void) {
+    ~Mymap(void) {
         delete[] node_array;
         delete[] adjacency_matrix;
         delete[] edge_array;
@@ -562,7 +562,7 @@ private:
 
 int main(int argc, char **argv) {
 
-    CMap *pMap = new CMap(6);
+    Mymap *pMap = new Mymap(6);
 
     Node *pNodeA = new Node('A');
     Node *pNodeB = new Node('B');
