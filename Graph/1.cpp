@@ -36,7 +36,7 @@ class Node {
 
 // 边
 class Edge {
-public:
+  public:
     Edge(int nodeIndexA = 0, int nodeIndexB = 0, int weightValue = 0)
         : node_index_a(nodeIndexA), node_index_b(nodeIndexB),
           weight_value(weightValue), is_selected(false) {}
@@ -65,13 +65,13 @@ public:
 
 // 图
 class Mymap {
-private:
+  private:
     int capacity;          // 顶点总数
     int node_count;        // 当前顶点数量
     Node *node_array;      // 顶点集合
     int *adjacency_matrix; // 邻接距阵
     Edge *edge_array;      // 最小生成树边集合
-public:
+  public:
     Mymap(int iCapacity) {
         capacity = iCapacity;
         node_count = 0;
@@ -86,7 +86,7 @@ public:
         delete[] edge_array;
     }
 
-private:
+  private:
     // 广度遍历具体实现
     void breadthFirstTraverseImpl(vector<int> pre_vec) {
         int val = 0;
@@ -151,7 +151,7 @@ private:
         }
     }
 
-public:
+  public:
     // 添加顶点
     void addNode(Node *node) {
         node_array[node_count].data = node->data;
@@ -407,13 +407,11 @@ public:
 
             // 取出最小边
             int retIndex = getMinEdge(edgeVec);
-            if (-1 != retIndex) {
+            if (retIndex != -1) {
                 // 存储选中边
                 edgeVec[retIndex].is_selected = true;
                 edge_array[iEdgeCount] = edgeVec[retIndex];
-                cout << node_array[edge_array
-                [iEdgeCount].node_index_a]
-                .data
+                cout << node_array[edge_array[iEdgeCount].node_index_a].data
                      << " - ";
                 cout << node_array[edge_array[iEdgeCount].node_index_b].data
                      << " (";
@@ -561,9 +559,89 @@ public:
     }
 };
 
-int main(int argc, char **argv) {
+void implementAlgorithmsSet(Mymap *myMap) {
+    cout << "打印矩阵: " << endl;
+    myMap->printMatrix();
+    cout << endl;
 
-    Mymap *pMap = new Mymap(6);
+    myMap->resetNode();
+
+    cout << "是否为有向图？" << endl;
+    cout << endl;
+    if (myMap->isDirectedGraph()) {
+        cout << "是有向图" << endl;
+        cout << endl;
+
+        cout << "普里姆算法: " << endl;
+        myMap->primTree(0);
+        cout << endl;
+
+        myMap->resetNode();
+
+        cout << "克鲁斯卡尔算法: " << endl;
+        myMap->kruskalTree();
+        cout << endl;
+
+        myMap->resetNode();
+
+    } else {
+        cout << "是无向图" << endl;
+        cout << endl;
+    }
+
+    // 继续判断是否是DAG
+    cout << "是否为有向无环图(DAG)？" << endl;
+    cout << endl;
+
+    if (myMap->isDAG()) {
+        cout << "是DAG" << endl;
+        cout << endl;
+
+        cout << "对DAG进行拓扑排序:" << endl;
+
+        myMap->topologicalSortWithStack();
+
+        cout << endl;
+
+    } else {
+        cout << "不是DAG" << endl;
+    }
+
+    // 判断是否是连通图
+    cout << "是否为连通图？" << endl;
+    if (myMap->isConnectedGraph()) {
+        cout << "是连通图" << endl;
+    } else {
+        cout << "不是连通图" << endl;
+    }
+
+    cout << "深度优先遍历: " << endl;
+    myMap->depthFirstTraverse(0);
+    cout << endl;
+
+    myMap->resetNode();
+
+    myMap->resetNode();
+
+    cout << "广度优先遍历: " << endl;
+    myMap->breadthFirstTraverse(0);
+    cout << endl;
+
+    myMap->resetNode();
+    cout << endl;
+
+    cout << "Dijkstra 算法最短路径：" << endl;
+    myMap->dijkstra(0);
+    cout << endl;
+
+    cout << "BellmanFord 算法最短路径：" << endl;
+    myMap->bellmanFord(0);
+    cout << endl;
+    cout << endl;
+}
+
+void test01() {
+    Mymap *myMap = new Mymap(6);
 
     Node *pNodeA = new Node('A');
     Node *pNodeB = new Node('B');
@@ -572,84 +650,105 @@ int main(int argc, char **argv) {
     Node *pNodeE = new Node('E');
     Node *pNodeF = new Node('F');
 
-    pMap->addNode(pNodeA);
-    pMap->addNode(pNodeB);
-    pMap->addNode(pNodeC);
-    pMap->addNode(pNodeD);
-    pMap->addNode(pNodeE);
-    pMap->addNode(pNodeF);
+    myMap->addNode(pNodeA);
+    myMap->addNode(pNodeB);
+    myMap->addNode(pNodeC);
+    myMap->addNode(pNodeD);
+    myMap->addNode(pNodeE);
+    myMap->addNode(pNodeF);
 
-    pMap->setValueToMatrixForDirectedGraph(0, 1, 7);  // 0 -> 1
-    pMap->setValueToMatrixForDirectedGraph(0, 2, 1);  // 0 -> 2
-    pMap->setValueToMatrixForDirectedGraph(0, 3, 9);  // 0 -> 3
-    pMap->setValueToMatrixForDirectedGraph(1, 2, 2);  // 1 -> 2
-    pMap->setValueToMatrixForDirectedGraph(1, 4, 3);  // 1 -> 4
-    pMap->setValueToMatrixForDirectedGraph(2, 3, 11); // 2 -> 3
-    pMap->setValueToMatrixForDirectedGraph(2, 4, 8);  // 2 -> 4
-    pMap->setValueToMatrixForDirectedGraph(2, 5, 4);  // 2 -> 5
-    pMap->setValueToMatrixForDirectedGraph(3, 5, 5);  // 3 -> 5
-    pMap->setValueToMatrixForDirectedGraph(4, 5, 15); // 4 -> 5
+    myMap->setValueToMatrixForDirectedGraph(0, 1, 7);  // 0 -> 1
+    myMap->setValueToMatrixForDirectedGraph(0, 2, 1);  // 0 -> 2
+    myMap->setValueToMatrixForDirectedGraph(0, 3, 9);  // 0 -> 3
+    myMap->setValueToMatrixForDirectedGraph(1, 2, 2);  // 1 -> 2
+    myMap->setValueToMatrixForDirectedGraph(1, 4, 3);  // 1 -> 4
+    myMap->setValueToMatrixForDirectedGraph(2, 3, 11); // 2 -> 3
+    myMap->setValueToMatrixForDirectedGraph(2, 4, 8);  // 2 -> 4
+    myMap->setValueToMatrixForDirectedGraph(2, 5, 4);  // 2 -> 5
+    myMap->setValueToMatrixForDirectedGraph(3, 5, 5);  // 3 -> 5
+    myMap->setValueToMatrixForDirectedGraph(4, 5, 15); // 4 -> 5
 
-    cout << "打印矩阵: " << endl;
-    pMap->printMatrix();
-    cout << endl;
+    implementAlgorithmsSet(myMap);
+}
 
-    pMap->resetNode();
+void test02() {
+    Mymap *myMap = new Mymap(6);
 
-    cout << "是否为有向图？" << endl;
-    if (pMap->isDirectedGraph()) {
-        cout << "是有向图" << endl;
-    } else {
-        cout << "是无向图" << endl;
-    }
+    Node *pNodeA = new Node('A');
+    Node *pNodeB = new Node('B');
+    Node *pNodeC = new Node('C');
+    Node *pNodeD = new Node('D');
+    Node *pNodeE = new Node('E');
+    Node *pNodeF = new Node('F');
 
-    // 继续判断是否是DAG
-    cout << "是否为有向无环图(DAG)？" << endl;
-    if (pMap->isDAG()) {
-        cout << "是DAG" << endl;
-    } else {
-        cout << "不是DAG" << endl;
-    }
+    myMap->addNode(pNodeA);
+    myMap->addNode(pNodeB);
+    myMap->addNode(pNodeC);
+    myMap->addNode(pNodeD);
+    myMap->addNode(pNodeE);
+    myMap->addNode(pNodeF);
 
-    // 判断是否是连通图
-    cout << "是否为连通图？" << endl;
-    if (pMap->isConnectedGraph()) {
-        cout << "是连通图" << endl;
-    } else {
-        cout << "不是连通图" << endl;
-    }
+    // 添加有向边
+    myMap->setValueToMatrixForDirectedGraph(0, 1, 5); // A -> B
+    myMap->setValueToMatrixForDirectedGraph(1, 2, 7); // B -> C
+    myMap->setValueToMatrixForDirectedGraph(2, 3, 3); // C -> D
+    myMap->setValueToMatrixForDirectedGraph(3, 4, 4); // D -> E
+    myMap->setValueToMatrixForDirectedGraph(4, 5, 6); // E -> F
+    implementAlgorithmsSet(myMap);
+}
 
-    cout << "深度优先遍历: " << endl;
-    pMap->depthFirstTraverse(0);
-    cout << endl;
+void test03() {
+    Mymap *myMap = new Mymap(6);
 
-    pMap->resetNode();
+    Node *pNodeA = new Node('A');
+    Node *pNodeB = new Node('B');
+    Node *pNodeC = new Node('C');
+    Node *pNodeD = new Node('D');
+    Node *pNodeE = new Node('E');
+    Node *pNodeF = new Node('F');
 
-    pMap->resetNode();
+    myMap->addNode(pNodeA);
+    myMap->addNode(pNodeB);
+    myMap->addNode(pNodeC);
+    myMap->addNode(pNodeD);
+    myMap->addNode(pNodeE);
+    myMap->addNode(pNodeF);
 
-    cout << "广度优先遍历: " << endl;
-    pMap->breadthFirstTraverse(0);
-    cout << endl;
+    // 添加无向边（双向）
+    myMap->setValueToMatrixForUndirectedGraph(0, 1, 5); // A -- B
+    myMap->setValueToMatrixForUndirectedGraph(1, 2, 7); // B -- C
+    myMap->setValueToMatrixForUndirectedGraph(2, 3, 3); // C -- D
+    myMap->setValueToMatrixForUndirectedGraph(3, 4, 4); // D -- E
+    myMap->setValueToMatrixForUndirectedGraph(4, 5, 6); // E -- F
+    implementAlgorithmsSet(myMap);
+}
 
-    pMap->resetNode();
+void test04() {
+    Mymap *myMap = new Mymap(4);
 
-    cout << "普里姆算法: " << endl;
-    pMap->primTree(0);
-    cout << endl;
+    Node *pNodeA = new Node('A');
+    Node *pNodeB = new Node('B');
+    Node *pNodeC = new Node('C');
+    Node *pNodeD = new Node('D');
 
-    pMap->resetNode();
+    myMap->addNode(pNodeA);
+    myMap->addNode(pNodeB);
+    myMap->addNode(pNodeC);
+    myMap->addNode(pNodeD);
 
-    cout << "克鲁斯卡尔算法: " << endl;
-    pMap->kruskalTree();
-    cout << endl;
+    // 添加有向边，所有边的权重为5
+    myMap->setValueToMatrixForDirectedGraph(0, 1, 5); // A -> B
+    myMap->setValueToMatrixForDirectedGraph(1, 2, 5); // B -> C
+    myMap->setValueToMatrixForDirectedGraph(2, 3, 5); // C -> D
+    myMap->setValueToMatrixForDirectedGraph(3, 0, 5); // D -> A (形成环)
+    implementAlgorithmsSet(myMap);
+}
 
-    pMap->resetNode();
-
-    cout << "Dijkstra 算法最短路径：" << endl;
-    pMap->dijkstra(0);
-
-    cout << "BellmanFord 算法最短路径：" << endl;
-    pMap->bellmanFord(0);
+int main() {
+    test01();
+    test02();
+    test03();
+    test04();
 
     system("pause");
     return 0;
