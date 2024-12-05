@@ -8,9 +8,5 @@ set(CMAKE_CXX_STANDARD 14)
 # 设置头文件目录
 include_directories(${PROJECT_SOURCE_DIR}/include)
 
-# 添加源文件
-set(SOURCE_FILES
-    graph.cpp
-)
-
-add_executable(Graph ${SOURCE_FILES})
+add_executable(Graph ${PROJECT_SOURCE_DIR}/Graph/graph.cpp)
+add_executable(Sort ${PROJECT_SOURCE_DIR}/Sort/sortsAlgorithms.cpp)
