@@ -10,3 +10,5 @@ include_directories(${PROJECT_SOURCE_DIR}/include)
 
 add_executable(Graph ${PROJECT_SOURCE_DIR}/Graph/graph.cpp)
 add_executable(Sort ${PROJECT_SOURCE_DIR}/Sort/sortsAlgorithms.cpp)
+add_executable(Hash ${PROJECT_SOURCE_DIR}/Hash/hash.cpp)
+
